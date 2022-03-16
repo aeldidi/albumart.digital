@@ -1,0 +1,10 @@
+image: alpine/latest
+oauth: pages.sr.ht/PAGES:RW
+environment:
+  site: albumart.digital
+tasks:
+- package: |
+    cd albumart.digital/web-client
+    tar -cvz index.html fonts/ lines.svg style.css > ../../site.tar.gz
+- upload: |
+    acurl -f https://pages.sr.ht/publish/albumart.digital -Fcontent=@site.tar.gz

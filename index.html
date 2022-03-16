@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Albumart.Digital</title>
+    <link rel="stylesheet" href="style.css" />
+    <script>
+        let timer
+
+        // After done_typing ms, make the API call
+        let done_typing = 100
+        let query = ''
+        let result = null
+        let empty = false
+        let spinner_showing = false
+
+        // We cancel the fetch each time they continue typing.
+        let cancel_signal = new AbortController()
+
+        document.addEventListener("DOMContentLoaded", function() {
+            result = document.getElementById('search-result')
+        })
+
+        function input_oninput(str) {
+            str = str.trim()
+            if (str === '') {
+                empty = true
+                spinner_showing = false
+                cancel_signal.abort()
+                clearTimeout(timer)
+                result.innerHTML = ''
+                return
+            }
+
+            query = str
+            clearTimeout(timer)
+            timer = setTimeout(api_get, done_typing)
+        }
+
+        function input_onkeydown() {
+            clearTimeout(timer)
+        }
+
+        async function api_get() {
+            if (empty) {
+                if (!spinner_showing) {
+                    result.innerHTML = '<div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>'
+                    spinner_showing = true
+                }
+            }
+
+            cancel_signal.abort()
+            cancel_signal = new AbortController()
+            let resp = ''
+            let body = ''
+            try {
+                resp = await fetch('http://api.albumart.digital/' +
+                    new URLSearchParams({
+                        q: query,
+                    }), {
+                        method: 'get',
+                        signal: cancel_signal.signal,
+                    })
+                body = await resp.text()
+            } catch (_) {
+                return
+            }
+            spinner_showing = false
+            empty = false
+            result.innerHTML = body
+        }
+    </script>
+</head>
+
+<body>
+    <header>
+        <div>
+            <h2>ALBUMART.DIGITAL</h2>
+            <p>Made by Ayman El Didi.</p>
+        </div>
+        <input type="text" id="search-box" class="box" placeholder="Search for an album..." aria-placeholder="Search for an album..." aria-label="Search for an album..." oninput="input_oninput(this.value)" onkeydown="input_onkeydown()" />
+    </header>
+    <main>
+        <div id="search-result">
+        </div>
+        <div class="background"></div>
+    </main>
+    <footer>
+    </footer>
+</body>
+
+</html>
