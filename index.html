@@ -57,7 +57,7 @@
             let resp = ''
             let body = ''
             try {
-                resp = await fetch('http://api.albumart.digital/' +
+                resp = await fetch('https://albumart.digital/api?' +
                     new URLSearchParams({
                         q: query,
                     }), {
