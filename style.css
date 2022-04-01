@@ -94,7 +94,7 @@ input {
     max-width: 90%;
 }
 
-#search-result>div {
+#search-result>div:not(.lds-spinner) {
     text-align: center;
     width: 800px;
     max-width: 80vw;
