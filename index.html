@@ -50,9 +50,10 @@
                     result.innerHTML = '<div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>'
                     spinner_showing = true
                 }
+            } else {
+                cancel_signal.abort()
             }
 
-            cancel_signal.abort()
             cancel_signal = new AbortController()
             let resp = ''
             let body = ''
