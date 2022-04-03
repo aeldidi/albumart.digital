@@ -6,10 +6,14 @@ body {
     font-weight: normal;
 }
 
+h1 {
+    font-size: 25px;
+}
+
 .box {
-    background-color: white;
-    border: 2px solid black;
-    box-shadow: 3px 1px 0px 2px, 0px -1px 0px 2px rgba(0, 0, 0, 0.62);
+    background-color: var(--bg-color);
+    border: var(--box-shadow-border);
+    box-shadow: var(--box-shadow);
 }
 
 h3.box {
@@ -17,6 +21,7 @@ h3.box {
 }
 
 html {
+    color: var(--fg-color);
     font-family: "Inter";
     overflow-y: scroll;
     overflow-x: hidden;
@@ -46,12 +51,11 @@ main {
 }
 
 header {
-    background-color: #fff;
     margin: 0;
     padding-bottom: 30px;
-    background-color: white;
-    border-bottom: 2px solid black;
-    box-shadow: 3px 1px 0px 2px, 0px -1px 0px 2px rgba(0, 0, 0, 0.62);
+    background-color: var(--bg-color);
+    border-bottom: var(--box-shadow-border);
+    box-shadow: var(--box-shadow);
 }
 
 header div {
@@ -66,7 +70,7 @@ header div p {
 }
 
 header div p a {
-    color: #000;
+    color: var(--fg-color);
 }
 
 input {
@@ -76,7 +80,7 @@ input {
     display: flex;
     padding: 15px;
     margin-top: 30px;
-    color: #111;
+    color: var(--fg-color);
     font-size: var(--search-box-font-size);
     height: calc(var(--search-box-font-size) + 2px);
     font-family: "Inter", cursive;
@@ -99,9 +103,9 @@ input {
     width: 800px;
     max-width: 80vw;
     min-height: calc( var(--search-result-title) + var(--search-result-artist) + var(--album-art-size) + 20px);
-    background-color: white;
-    border: 2px solid black;
-    box-shadow: 3px 1px 0px 2px, 0px -1px 0px 2px rgba(0, 0, 0, 0.62);
+    background-color: var(--bg-color);
+    border: var(--box-shadow-border);
+    box-shadow: var(--box-shadow);
     padding: 10px;
     display: flex;
     flex-direction: column;
@@ -150,6 +154,28 @@ input {
     header div * {
         margin: 10px;
         margin-left: 20px;
+    }
+}
+
+
+/* Light theme (the default) */
+
+:root {
+    --fg-color: #000;
+    --bg-color: #fff;
+    --box-shadow: 3px 1px 0px 2px, 0px -1px 0px 2px rgba(0, 0, 0, 0.62);
+    --box-shadow-border: 2px solid var(--fg-color);
+}
+
+
+/* Dark theme */
+
+@media (prefers-color-scheme: dark) {
+     :root {
+        --fg-color: #fff;
+        --bg-color: #000;
+        --box-shadow: 3px 1px 0px 2px, 0px -1px 0px 2px rgba(255, 255, 255, 0.38);
+        --box-shadow-border: 2px solid var(--fg-color);
     }
 }
 

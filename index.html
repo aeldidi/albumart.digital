@@ -5,14 +5,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <meta name="theme-color" content="#fff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#000" media="(prefers-color-scheme: dark)">
     <title>Albumart.Digital</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="/style.css" />
     <script>
-        let timer
-
-        // After done_typing ms, make the API call
-        let done_typing = 100
-        let query = ''
         let result = null
         let empty = false
         let spinner_showing = false
@@ -24,31 +21,31 @@
             result = document.getElementById('search-result')
         })
 
-        function input_oninput(str) {
+        async function input_oninput(str) {
             str = str.trim()
             if (str === '') {
                 empty = true
                 spinner_showing = false
                 cancel_signal.abort()
-                clearTimeout(timer)
                 result.innerHTML = ''
                 return
             }
 
-            query = str
-            clearTimeout(timer)
-            timer = setTimeout(api_get, done_typing)
+            tmp = await api_get(str)
+            if (tmp != '') {
+                result.innerHTML = tmp
+            }
         }
 
         function input_onkeydown() {
-            clearTimeout(timer)
+            // clearTimeout(timer)
         }
 
-        async function api_get() {
+        async function api_get(query) {
             if (empty) {
                 if (!spinner_showing) {
-                    result.innerHTML = '<div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>'
                     spinner_showing = true
+                    return '<div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>'
                 }
             } else {
                 cancel_signal.abort()
@@ -67,11 +64,11 @@
                     })
                 body = await resp.text()
             } catch (_) {
-                return
+                return ''
             }
             spinner_showing = false
             empty = false
-            result.innerHTML = body
+            return body
         }
     </script>
 </head>
@@ -79,7 +76,7 @@
 <body>
     <header>
         <div>
-            <h2>ALBUMART.DIGITAL</h2>
+            <h1>ALBUMART.DIGITAL</h1>
             <p>Made by Ayman El Didi.</p>
         </div>
         <input type="text" id="search-box" class="box" placeholder="Search for an album..." aria-placeholder="Search for an album..." aria-label="Search for an album..." oninput="input_oninput(this.value)" onkeydown="input_onkeydown()" />
