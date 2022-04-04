@@ -83,7 +83,7 @@ input {
     color: var(--fg-color);
     font-size: var(--search-box-font-size);
     height: calc(var(--search-box-font-size) + 2px);
-    font-family: "Inter", cursive;
+    font-family: "Inter", sans-serif;
     letter-spacing: 2px;
     text-transform: uppercase;
 }
