@@ -3,10 +3,13 @@
 
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <meta name="theme-color" content="#fff" media="(prefers-color-scheme: light)">
-    <meta name="theme-color" content="#000" media="(prefers-color-scheme: dark)">
+    <meta name="theme-color" content="#fff"
+        media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#000"
+        media="(prefers-color-scheme: dark)">
     <title>Albumart.Digital</title>
     <link rel="stylesheet" href="/style.css" />
     <script>
@@ -17,7 +20,7 @@
         // We cancel the fetch each time they continue typing.
         let cancel_signal = new AbortController()
 
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             result = document.getElementById('search-result')
         })
 
@@ -30,22 +33,48 @@
                 result.innerHTML = ''
                 return
             }
+            empty = false
 
-            tmp = await api_get(str)
-            if (tmp != '') {
-                result.innerHTML = tmp
+            let response = await api_get(str)
+
+            switch (response["status"]) {
+                case 'ok':
+                    // Parse the result
+                    let buffer = ''
+                    let data = response["response"]
+                    for (let i = 0; i < data.length; i += 1) {
+                        let album = data[i]
+                        buffer += `<div class="album-list-item">
+                            <h3>${album["name"]}</h3>
+                            <p>${album["artist-name"]}</p>
+                            <a href="${album["artwork"]}">
+                                <img loading="lazy" src="${album["artwork-small"]}">
+                            </a>
+                        </div>`
+                    }
+
+                    result.innerHTML = buffer
+                    break
+                case 'error':
+                    result.innerHTML = `
+                    <div class="album-error">
+                        <h2>There was an internal server error.</h2>
+                        <p>Error Message: ${response["message"]}</p>
+                        <p>Send this error message to the website's
+                            administrator, then reload the page and try again
+                            later.</p>
+                    </div>`
+                    break
+                default: break
             }
-        }
-
-        function input_onkeydown() {
-            // clearTimeout(timer)
         }
 
         async function api_get(query) {
             if (empty) {
                 if (!spinner_showing) {
                     spinner_showing = true
-                    return '<div class="lds-spinner"><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div><div></div></div>'
+                    return '<div class="lds-spinner">' +
+                        '<div></div>'.repeat(12) + '</div>'
                 }
             } else {
                 cancel_signal.abort()
@@ -54,21 +83,37 @@
             cancel_signal = new AbortController()
             let resp = ''
             let body = ''
+            let timeout = setTimeout(cancel_signal.abort, 5000)
             try {
                 resp = await fetch('https://albumart.digital/api?' +
                     new URLSearchParams({
                         q: query,
                     }), {
-                        method: 'get',
-                        signal: cancel_signal.signal,
-                    })
-                body = await resp.text()
+                    method: 'get',
+                    signal: cancel_signal.signal,
+                })
+                clearTimeout(timeout)
+
+                body = JSON.parse(await resp.text())
+
+                if (!resp.ok) {
+                    return {
+                        status: 'error',
+                        message: body["message"],
+                    }
+                }
             } catch (_) {
-                return ''
+                clearTimeout(timeout)
+                return {
+                    status: 'empty',
+                }
             }
             spinner_showing = false
             empty = false
-            return body
+            return {
+                status: 'ok',
+                response: body,
+            }
         }
     </script>
 </head>
@@ -79,7 +124,11 @@
             <h1>ALBUMART.DIGITAL</h1>
             <p>Made by Ayman El Didi.</p>
         </div>
-        <input type="text" id="search-box" class="box" placeholder="Search for an album..." aria-placeholder="Search for an album..." aria-label="Search for an album..." oninput="input_oninput(this.value)" onkeydown="input_onkeydown()" />
+        <input type="text" id="search-box" class="box"
+            placeholder="Search for an album..."
+            aria-placeholder="Search for an album..."
+            aria-label="Search for an album..."
+            oninput="input_oninput(this.value)" />
     </header>
     <main>
         <div id="search-result">
