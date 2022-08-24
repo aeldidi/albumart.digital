@@ -2,21 +2,18 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <meta name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="theme-color" content="#fff"
         media="(prefers-color-scheme: light)">
     <meta name="theme-color" content="#000"
         media="(prefers-color-scheme: dark)">
     <title>Albumart.Digital</title>
-    <link rel="stylesheet" href="/style.css" />
+    <link rel="stylesheet" href="/style.css">
     <script>
         let result = null
-        let empty = false
-        let spinner_showing = false
-
         // We cancel the fetch each time they continue typing.
         let cancel_signal = new AbortController()
 
@@ -27,13 +24,10 @@
         async function input_oninput(str) {
             str = str.trim()
             if (str === '') {
-                empty = true
-                spinner_showing = false
                 cancel_signal.abort()
                 result.innerHTML = ''
                 return
             }
-            empty = false
 
             let response = await api_get(str)
 
@@ -70,15 +64,9 @@
         }
 
         async function api_get(query) {
-            if (empty) {
-                if (!spinner_showing) {
-                    spinner_showing = true
-                    return '<div class="lds-spinner">' +
+            result.innerHTML = '<div class="lds-spinner">' +
                         '<div></div>'.repeat(12) + '</div>'
-                }
-            } else {
-                cancel_signal.abort()
-            }
+            cancel_signal.abort()
 
             cancel_signal = new AbortController()
             let resp = ''
@@ -109,7 +97,6 @@
                 }
             }
             spinner_showing = false
-            empty = false
             return {
                 status: 'ok',
                 response: body,

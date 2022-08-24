@@ -18,7 +18,7 @@ License
 -------
 
 Everything in this repo is
-[public domain](https://creativecommons.org/publicdomain/zero/1.0/) with the
+[public domain](https://landley.net/toybox/license.html) with the
 exception of the [Inter](https://rsms.me/inter/) font in `fonts/`,
 which is availible under the SIL Open Font License 1.1, with the following
 copyright:
