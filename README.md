@@ -8,7 +8,7 @@ except this `README.md` and the `LICENCES/` directory is sufficient to host it.
 API Server
 ----------
 
-See https://git.sr.ht/~aeldidi/albumart.digital-api for more information on
+See https://github.com/aeldidi/albumart.digital-api for more information on
 hosting the API.
 
 If you do host your own API server, be sure to change the respective `fetch`

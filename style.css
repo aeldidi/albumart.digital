@@ -1,4 +1,5 @@
 @import url("/fonts/inter/inter.css");
+
 body {
     margin: 0;
     text-transform: uppercase;
@@ -100,16 +101,15 @@ input {
 
 #search-result>div:not(.lds-spinner) {
     text-align: center;
-    width: 800px;
     max-width: 80vw;
-    min-height: calc( var(--search-result-title) + var(--search-result-artist) + var(--album-art-size) + 20px);
+    min-height: calc(var(--search-result-title) + var(--search-result-artist) + var(--album-art-size) + 20px);
     background-color: var(--bg-color);
     border: var(--box-shadow-border);
     box-shadow: var(--box-shadow);
     padding: 10px;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    justify-content: center;
 }
 
 .album-list-item h3 {
@@ -145,12 +145,14 @@ input {
 /* For screens < 600px wide */
 
 @media all and (max-width: 600px) {
-     :root {
+    :root {
         --album-art-size: 80vw;
     }
+
     header div {
         flex-direction: column;
     }
+
     header div * {
         margin: 10px;
         margin-left: 20px;
@@ -171,7 +173,7 @@ input {
 /* Dark theme */
 
 @media (prefers-color-scheme: dark) {
-     :root {
+    :root {
         --fg-color: #fff;
         --bg-color: #000;
         --box-shadow: 3px 1px 0px 2px, 0px -1px 0px 2px rgba(255, 255, 255, 0.38);
@@ -275,6 +277,7 @@ input {
     0% {
         opacity: 1;
     }
+
     100% {
         opacity: 0;
     }
